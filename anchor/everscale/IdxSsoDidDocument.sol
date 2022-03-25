@@ -31,7 +31,7 @@ contract IdxSsoDidDocument is IIdxSsoDidDocument
 
     ///// Upgrade //////
     function upgrade(TvmCell code) 
-        public onlyController
+        public onlyIdxAuthority
     {
         TvmBuilder state;
         state.store(controller);

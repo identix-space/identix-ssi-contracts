@@ -49,7 +49,7 @@ contract IdxSsoDidRegistry
 		address addr = new IdxSsoDidDocument
         {
             stateInit: stateInit, 
-            value: initialDocBalance
+            value: Gas.DidDocInitialValue
         }
         ();
         
@@ -67,10 +67,20 @@ contract IdxSsoDidRegistry
         external responsible
         returns (address[] docs) 
     {
+        // external call
         if (msg.pubkey() != 0)
+        {
             require(msg.pubkey() == _controllerPubKey, Errors.MessageSenderIsNotController);
-        if (controller.value == 0)
-            controller = address(this);
+            tvm.accept();
+            if (controller.value == 0)
+                controller = address(this);
+        }
+        // internal call
+        else // if (msg.sender.value != 0)
+        {
+            require(msg.sender == controller, Errors.MessageSenderIsNotController);
+        }
+
         address[] result;
         result = _dids[controller];
         return result;
@@ -88,7 +98,7 @@ contract IdxSsoDidRegistry
     
     modifier checkAccessAndAccept() 
     {
-        require(isController(), DidContractError.MessageSenderIsNeitherOwnerNorAuthority);
+        require(isController(), Errors.MessageSenderIsNotController);
         tvm.accept();
         _;
     }
@@ -100,14 +110,13 @@ contract IdxSsoDidRegistry
         return _controllerPubKey == msg.pubkey();
     }
 
-    function changeOwner(uint256 eitherNewOwnerPubKey, address orNewOwnerAddress)
+    function changeController(uint256 newControllerPubKey)
         external
     {
-        require(isOwner(), DidContractError.MessageSenderIsNotController);
-        require(Utils.isPubKeyXorAddressNotEmpty(eitherNewOwnerPubKey, orNewOwnerAddress), DidContractError.MissingOwnerPublicKeyOrAddressOrBothGiven);
+        require(isController(), Errors.MessageSenderIsNotController);
+        require(newControllerPubKey != 0, Errors.AddressOrPubKeyIsNull);
         tvm.accept();
-        controllerPubKey = eitherNewOwnerPubKey;
-        controllerAddress = orNewOwnerAddress;
+        _controllerPubKey = newControllerPubKey;
     }
 
     ////// General //////
