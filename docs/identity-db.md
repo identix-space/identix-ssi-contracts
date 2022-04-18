@@ -1,5 +1,5 @@
 #Tables
-##identix_accounts
+## identix_accounts
 ```javascript
 // unique user id, primarykey
 id: int
@@ -45,7 +45,7 @@ method: int
 // method-specific identifier
 accound_id: string
 ```
-##known_dids
+## known_dids
 ```javascript
 // primarykey
 id: int

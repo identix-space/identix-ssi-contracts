@@ -1,0 +1,6 @@
+{
+    "$id": "https://identix.space/vcschemas/meta/did_relative/1",
+    "type": "string",
+    // TODO
+    "pattern": "()"
+}

@@ -1,0 +1,6 @@
+{
+    "$id": "https://identix.space/vcschemas/meta/did_absolute/1",
+    "type": "string",
+    // TODO
+    "pattern": "(did)(:(?<method>[a-zA-Z0-9]+)+)(:(?<method_spec_id>([a-zA-Z0-9.-_]|(%[a-fA-F0-9][a-fA-F0-9]))+))(?<path>(\/[a-zA-Z0-9_-]+)*)(?<fragment>(#[a-zA-Z0-9_-]+)*)(?<query>(\?[a-zA-Z_-]+)*)"
+}

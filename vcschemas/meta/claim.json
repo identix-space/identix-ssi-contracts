@@ -1,0 +1,13 @@
+{
+    "$id": "https://identix.space/vcschemas/meta/claim/1",
+    "type": "object",
+    "properties":
+    {
+        "id": { "type": "/vcschemas/meta/did" },
+        "predicate": { "type": "/vcschemas/meta/did" },
+        "subject": { "type": "string" },
+        "object": { "type": "#/$defs/object_def" },
+        "comment": { "type": "string" }
+    },
+    "required": [ "id" ]
+}

@@ -31,6 +31,7 @@ contract IdxSsoDidRegistry
         checkAccessAndAccept
         returns (address didDocAddr) 
     {
+        // there can be many DIDs associated with a single controller
         TvmBuilder salt;
         salt.store(tx.timestamp);
         TvmCell saltedCode = tvm.setCodeSalt(_templateCode, salt.toCell());
@@ -67,7 +68,7 @@ contract IdxSsoDidRegistry
         external responsible
         returns (address[] docs) 
     {
-        // external call
+        // external call from Identix owner
         if (msg.pubkey() != 0)
         {
             require(msg.pubkey() == _controllerPubKey, Errors.MessageSenderIsNotController);
@@ -92,6 +93,30 @@ contract IdxSsoDidRegistry
         checkAccessAndAccept()
     {
         _templateCode = code;
+    }
+
+    ///// Upgrade //////
+    function upgrade(TvmCell code) 
+        public checkAccessAndAccept
+    {
+        TvmBuilder state;
+        state.store(_templateCode);
+        state.store(_controllerPubKey);
+        state.store(_dids);
+
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+        onCodeUpgrade(state.toCell());
+    }
+
+    function onCodeUpgrade(TvmCell data) 
+        private 
+    {
+        tvm.resetStorage();
+        TvmSlice slice = data.toSlice();
+        _templateCode = slice.decode(TvmCell);
+        _controllerPubKey = slice.decode(uint256);
+        _dids = slice.decode(mapping (address => address[]));
     }
 
     ////// Access //////
