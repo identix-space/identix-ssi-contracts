@@ -5,57 +5,60 @@ pragma AbiHeader pubkey;
 import "libraries/Errors.sol";
 import "libraries/Gas.sol";
 import "libraries/Aux.sol";
-import "interfaces/IIdxSsoDidDocument.sol";
-import "IdxSsoDidDocument.sol";
+import "interfaces/IIdxDidDocument.sol";
+import "IdxDidDocument.sol";
 
 contract IdxSsoDidRegistry 
 {
-    TvmCell private _templateCode;
-    uint256 private _controllerPubKey;
+    TvmCell private _didDocTemplateCode;
+    uint256 private _idxControllerPubKey;
     mapping (address => address[]) private _dids;
-    uint8 private ver = 1;
+    uint16 public codeVer;
 
     constructor(TvmCell tplCode) 
         public externalMsg
     {
         require(msg.pubkey() != 0, Errors.AddressOrPubKeyIsNull);
         tvm.accept();
-        _controllerPubKey = msg.pubkey();
-        _templateCode = tplCode;
+        _idxControllerPubKey = msg.pubkey();
+        _didDocTemplateCode = tplCode;
+        codeVer = 0x0010;
     }
 
     ////// Document management //////
 
-    function issueDid(address didController) 
+    function issueDidDoc(uint256 subjectPubKey, uint256 salt, address didController) 
         external externalMsg responsible
         checkAccessAndAccept
         returns (address didDocAddr) 
     {
         // there can be many DIDs associated with a single controller
-        TvmBuilder salt;
-        salt.store(tx.timestamp);
-        TvmCell saltedCode = tvm.setCodeSalt(_templateCode, salt.toCell());
+        // if provided salt is non-negative, it can be DID document content hash to make address computable
+        TvmBuilder saltCell;
+        saltCell.store(salt == 0 ? tx.timestamp : salt);
+        TvmCell saltedCode = tvm.setCodeSalt(_didDocTemplateCode, saltCell.toCell());
 
 		TvmCell stateInit = tvm.buildStateInit(
         {
-            contr: IdxSsoDidDocument,
+            contr: IdxDidDocument,
             code: saltedCode,
             pubkey: tvm.pubkey(),
             varInit: 
             {
+                subjectPubKey: subjectPubKey,
                 idxAuthority: address(this)
             }
         });
 
-		address addr = new IdxSsoDidDocument
+		address addr = new IdxDidDocument
         {
             stateInit: stateInit, 
             value: Gas.DidDocInitialValue
         }
-        ();
+        (subjectPubKey);
         
         if (didController.value != 0)
-            IIdxSsoDidDocument(addr).changeController(didController);
+            IIdxDidDocument(addr).changeController(didController);
         else
             didController = address(this);
 
@@ -65,13 +68,13 @@ contract IdxSsoDidRegistry
     }
 
     function getDidDocs(address controller)
-        external responsible
+        external view responsible
         returns (address[] docs) 
     {
         // external call from Identix owner
         if (msg.pubkey() != 0)
         {
-            require(msg.pubkey() == _controllerPubKey, Errors.MessageSenderIsNotController);
+            require(msg.pubkey() == _idxControllerPubKey, Errors.MessageSenderIsNotController);
             tvm.accept();
             if (controller.value == 0)
                 controller = address(this);
@@ -92,17 +95,20 @@ contract IdxSsoDidRegistry
         external externalMsg
         checkAccessAndAccept()
     {
-        _templateCode = code;
+        _didDocTemplateCode = code;
     }
 
     ///// Upgrade //////
-    function upgrade(TvmCell code) 
+    function upgrade(TvmCell code, uint16 nextVer) 
         public checkAccessAndAccept
     {
+        require(nextVer > codeVer, 206);
+
         TvmBuilder state;
-        state.store(_templateCode);
-        state.store(_controllerPubKey);
+        state.store(_didDocTemplateCode);
+        state.store(_idxControllerPubKey);
         state.store(_dids);
+        state.store(nextVer);
 
         tvm.setcode(code);
         tvm.setCurrentCode(code);
@@ -114,9 +120,10 @@ contract IdxSsoDidRegistry
     {
         tvm.resetStorage();
         TvmSlice slice = data.toSlice();
-        _templateCode = slice.decode(TvmCell);
-        _controllerPubKey = slice.decode(uint256);
+        _didDocTemplateCode = slice.decode(TvmCell);
+        _idxControllerPubKey = slice.decode(uint256);
         _dids = slice.decode(mapping (address => address[]));
+        codeVer = slice.decode(uint16);
     }
 
     ////// Access //////
@@ -132,7 +139,7 @@ contract IdxSsoDidRegistry
         private view
         returns (bool)
     {
-        return _controllerPubKey == msg.pubkey();
+        return _idxControllerPubKey == msg.pubkey();
     }
 
     function changeController(uint256 newControllerPubKey)
@@ -141,7 +148,7 @@ contract IdxSsoDidRegistry
         require(isController(), Errors.MessageSenderIsNotController);
         require(newControllerPubKey != 0, Errors.AddressOrPubKeyIsNull);
         tvm.accept();
-        _controllerPubKey = newControllerPubKey;
+        _idxControllerPubKey = newControllerPubKey;
     }
 
     ////// General //////
