@@ -54,11 +54,11 @@ ddcode=$(decode_contract_code $root/IdxDidDocument.tvc)
 if [[ "$network" = "main" ]] 
 then
     # calc the target addr
-    local caddr=$(contract_address $contract_file $signer)
+    local caddr=$(contract_address $contract_file ~/tonkeys/$signer)
     assert_not_empty $caddr "Cannot generate addr"
     #topping up the acc
     yell topping 0:$caddr
-    topup $caddr $signer 1000000000 main
+    topup  $caddr $signer 1000000000 main
 fi
 
 yell Deploying Identix DID registry

@@ -78,7 +78,13 @@ def test_issue_doc():
 # region Update tests
 
 def test_update_idx_registry():
-    pass
+    global idx_registry
+    newcode = ts4.load_code_cell('ts4/IdxDidRegistry2')
+    idx_registry.call_method_signed('upgrade', dict(code = newcode, nextVer = 0xFF00))
+    ts4.dispatch_messages()
+    idx_registry = ts4.BaseContract('ts4/IdxDidRegistry2', None, address=idx_registry.address, keypair=idx_controller)
+    eq(0xFF00, idx_registry.g.codeVer())
+    eq('my upgraded echo', idx_registry.call_method_signed('echo', dict(what = 'my upgraded echo')))
 
 
 def test_update_doc():

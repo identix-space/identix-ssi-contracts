@@ -44,7 +44,7 @@ topup_main()
     local source=$1
     assert_not_empty "$1" "topup: source address missing"
     local dest=$2
-    assert_not_empty "$2" "topup: set address missing"
+    assert_not_empty "$2" "topup: dest address missing"
     local value=$3
     assert_not_empty "$3" "topup: value missing"
     local keys=$4
@@ -58,11 +58,11 @@ contract_address()
 {
     local contract_file=$1
     assert_not_empty "$1" "deploy: contract file missing"
-    local signer=$2
-    assert_not_empty "$2" "deploy: signer missing"
+    local keys=$2
+    assert_not_empty "$2" "deploy: keys missing"
     local path=$(dirname $contract_file)
     set -x
-    local result=$(tonos-cli genaddr --setkey ~/tonkeys/$signer $path/$contract_file.tvc $path/$contract_file.abi.json | grep_deploy_addr)
+    local result=$(tonos-cli genaddr --setkey $signer $path/$contract_file.tvc $path/$contract_file.abi.json | grep_deploy_addr)
     set +x
     echo $result
 }
