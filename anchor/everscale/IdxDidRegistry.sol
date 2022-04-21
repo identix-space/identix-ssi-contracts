@@ -3,8 +3,8 @@ pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
 import "libraries/Errors.sol";
-import "libraries/Gas.sol";
 import "libraries/Aux.sol";
+import "libraries/Gas.sol";
 import "interfaces/IIdxDidDocument.sol";
 import "IdxDidDocument.sol";
 

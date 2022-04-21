@@ -1,0 +1,126 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "https://identix.space/schemas/meta/vccs/1",
+    "title": "Verifiable Credentials Claim Specification",
+    "type": "object",
+    "properties": {
+        "id": { "ref": "#/$defs/did_vc_spec" },
+        "title": { "type": "string" }
+    },
+    "$defs": {
+        "did_absolute": {
+            "type": "string",
+            "pattern": "(did)(:([a-zA-Z0-9]+)+)(:(([a-zA-Z0-9.-_]|(%[a-fA-F0-9][a-fA-F0-9]))+))((\/[a-zA-Z0-9_-]+)*)((#[a-zA-Z0-9_-]+)*)?[a-zA-Z_-]+"
+        },
+        "did_relative": {
+            "type": "string",
+            "pattern": ""
+        },
+        "did": {
+            "$ref": "#/$defs/did_absolute"
+        },
+        "did_vc_spec": {
+            "type": "string",
+            "pattern": "did:identixschemas\/[a-zA-Z0-9_][a-zA-Z0-9_-]*"
+        },
+        "subject_def": {
+            "properties": {
+                "expected_types": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/did"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                }
+            }
+        },
+        "object_def": {
+            "properties": {
+                "expected_types": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "$ref": "#/$defs/did_vc_spec"
+                            }
+                        ]
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                }
+            }
+        },
+        "predicate": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "alias": {
+                    "type": "string"
+                },
+                "subject": {
+                    "$ref": "#/$defs/subject_def"
+                },
+                "object": {
+                    "$ref": "#/$defs/object_def"
+                },
+                "comment": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ]
+        },
+        "claim": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/did_vc_spec"
+                },
+                "predicate": {
+                    "$ref": "#/$defs/did_vc_spec"
+                },
+                "subject": {
+                    "type": "object"
+                },
+                "object": {
+                    "type": "object"
+                },
+                "comment": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id"
+            ]
+        },
+        "claim_group": {
+            "type": "object",
+            "properties": {
+                "claims": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/claim"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                },
+                "signature": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

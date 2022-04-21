@@ -1,6 +1,0 @@
-{
-    "$id": "https://identix.space/vcschemas/meta/schema_did",
-    "type": "string",
-    // TODO
-    "pattern": "did:ever:identixschemas\/.*"
-}

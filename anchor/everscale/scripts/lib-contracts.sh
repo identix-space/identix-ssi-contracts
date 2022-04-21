@@ -39,21 +39,6 @@ deploy_contract()
     echo $caddr
 }
 
-topup_main()
-{
-    local source=$1
-    assert_not_empty "$1" "topup: source address missing"
-    local dest=$2
-    assert_not_empty "$2" "topup: dest address missing"
-    local value=$3
-    assert_not_empty "$3" "topup: value missing"
-    local keys=$4
-    assert_not_empty "$4" "topup: keys file missing"
-
-    local success=$(tonos-cli multisig send --url main.ton.dev --addr $source --dest $dest --purpose "deploy" --sign $keys --value:$value | grep_success)
-    assert_not_empty "$success" "Cannot top up the acc: $dest"
-}
-
 contract_address()
 {
     local contract_file=$1

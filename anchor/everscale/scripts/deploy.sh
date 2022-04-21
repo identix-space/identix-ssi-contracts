@@ -13,6 +13,7 @@ root=..
 for a in $@
 do
     if [[ "$network" = "main" ]]
+    then
         wallet_addr=$a
     fi
     case $a in
@@ -23,18 +24,19 @@ do
     esac
 done
 
-if [[ "$network" = "dev" ]] 
-then
-    giver_arg="-v $initial_balance"
-    url_param=""
-    signer=$idx_signer
-    yell DEV network
-elif [[ "$network" = "se" ]] 
+if [[ "$network" = "se" ]] 
 then
     giver_arg="-v $initial_balance"
     url_param="-u localhost"
     signer=$idx_signer
     yell SE network
+elif [[ "$network" = "dev" ]] 
+then
+    # giver_arg="-v $initial_balance"
+    giver_arg=""
+    url_param="--url net.ton.dev"
+    signer=$idx_signer
+    yell DEV network
 elif [[ "$network" = "main" ]] 
 then
     giver_arg=""
@@ -51,14 +53,16 @@ fi
 
 ddcode=$(decode_contract_code $root/IdxDidDocument.tvc)
 
-if [[ "$network" = "main" ]] 
+if [[ "$network" = "main" ]] #|| [[ "$network" = "dev" ]] 
 then
     # calc the target addr
-    local caddr=$(contract_address $contract_file ~/tonkeys/$signer)
+    caddr=$(tonos-cli genaddr --setkey ~/tonkeys/$signer ../IdxDidRegistry.tvc ../IdxDidRegistry.abi.json | grep_deploy_addr)
     assert_not_empty $caddr "Cannot generate addr"
     #topping up the acc
-    yell topping 0:$caddr
-    topup  $caddr $signer 1000000000 main
+    yell topping $(f_green $caddr)
+    set -x
+    success=$(tonos-cli $url_param multisig send --addr 0:00c9418e59d2f6aab6bb891b4e2f63733d37d15f41f229ff57ea84d00eae477f --dest $caddr --purpose "deploy" --sign ~/tonkeys/cwallet --value 1000000000 | grep_success)
+    assert_not_empty "$success" "Cannot top up the acc: $caddr"
 fi
 
 yell Deploying Identix DID registry
