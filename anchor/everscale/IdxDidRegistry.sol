@@ -32,6 +32,8 @@ contract IdxSsoDidRegistry
         checkAccessAndAccept
         returns (address didDocAddr) 
     {
+        require(subjectPubKey != 0, Errors.AddressOrPubKeyIsNull);
+        
         // there can be many DIDs associated with a single controller
         // if provided salt is non-negative, it can be DID document content hash to make address computable
         TvmBuilder saltCell;

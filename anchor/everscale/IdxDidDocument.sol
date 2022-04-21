@@ -6,7 +6,6 @@ import "libraries/Errors.sol";
 import "libraries/Aux.sol";
 import "interfaces/IIdxDidDocument.sol";
 
-
 contract IdxDidDocument is IIdxDidDocument  
 {   
     // IIdxController

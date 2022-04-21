@@ -22,27 +22,27 @@ DEPTH
 ADDCONST -5
 PICK
 THROWIF 72
-.loc IdxDidDocument.sol, 21
+.loc IdxDidDocument.sol, 20
 GETGLOB 9
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 204
-.loc IdxDidDocument.sol, 22
+.loc IdxDidDocument.sol, 21
 GETGLOB 12
 PARSEMSGADDR
 INDEX 3
 PLDU 256
 THROWIFNOT 204
-.loc IdxDidDocument.sol, 23
+.loc IdxDidDocument.sol, 22
 DUP
 THROWIFNOT 204
-.loc IdxDidDocument.sol, 24
+.loc IdxDidDocument.sol, 23
 GETGLOB 9
 SETGLOB 10
-.loc IdxDidDocument.sol, 25
+.loc IdxDidDocument.sol, 24
 SETGLOB 11
-.loc IdxDidDocument.sol, 26
+.loc IdxDidDocument.sol, 25
 PUSHINT 16
 SETGLOB 13
 .loc IdxDidDocument.sol, 0
@@ -60,7 +60,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc IdxDidDocument.sol, 31
+.loc IdxDidDocument.sol, 30
 ENDS
 .loc IdxDidDocument.sol, 0
 CALLREF {
@@ -95,7 +95,7 @@ CALLREF {
 THROW 0
 
 .macro getSubjectPubKey_internal_macro
-.loc IdxDidDocument.sol, 34
+.loc IdxDidDocument.sol, 33
 GETGLOB 11
 .loc IdxDidDocument.sol, 0
 
@@ -108,7 +108,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc IdxDidDocument.sol, 37
+.loc IdxDidDocument.sol, 36
 ENDS
 .loc IdxDidDocument.sol, 0
 CALLREF {
@@ -147,7 +147,7 @@ CALLREF {
 THROW 0
 
 .macro getControllerAddress_internal_macro
-.loc IdxDidDocument.sol, 40
+.loc IdxDidDocument.sol, 39
 GETGLOB 10
 .loc IdxDidDocument.sol, 0
 
@@ -160,7 +160,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc IdxDidDocument.sol, 43
+.loc IdxDidDocument.sol, 42
 OVER
 PUSHCONT {
 	LDREF
@@ -181,12 +181,12 @@ CALLREF {
 THROW 0
 
 .macro changeController_internal_macro
-.loc IdxDidDocument.sol, 76
+.loc IdxDidDocument.sol, 75
 GETGLOB 9
 GETGLOB 10
 SDEQ
 THROWIFNOT 200
-.loc IdxDidDocument.sol, 46
+.loc IdxDidDocument.sol, 45
 SETGLOB 10
 .loc IdxDidDocument.sol, 0
 
@@ -199,7 +199,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc IdxDidDocument.sol, 50
+.loc IdxDidDocument.sol, 49
 LDREF
 LDU 16
 ENDS
@@ -218,26 +218,26 @@ THROW 0
 CALL $upgrade_internal_macro$
 
 .macro upgrade_internal_macro
-.loc IdxDidDocument.sol, 82
+.loc IdxDidDocument.sol, 81
 GETGLOB 9
 GETGLOB 12
 SDEQ
 THROWIFNOT 201
-.loc IdxDidDocument.sol, 53
+.loc IdxDidDocument.sol, 52
 DUP
 GETGLOB 13
 GREATER
 THROWIFNOT 100
-.loc IdxDidDocument.sol, 55
+.loc IdxDidDocument.sol, 54
 GETGLOB 10
 NEWC
 STSLICE
-.loc IdxDidDocument.sol, 56
+.loc IdxDidDocument.sol, 55
 STU 16
-.loc IdxDidDocument.sol, 58
+.loc IdxDidDocument.sol, 57
 OVER
 SETCODE
-.loc IdxDidDocument.sol, 59
+.loc IdxDidDocument.sol, 58
 SWAP
 CTOS
 DUP
@@ -252,7 +252,7 @@ PLDREF
 CTOS
 BLESS
 POP C3
-.loc IdxDidDocument.sol, 60
+.loc IdxDidDocument.sol, 59
 ENDC
 CALLREF {
 	CALL $:onCodeUpgrade$
@@ -261,7 +261,7 @@ CALLREF {
 
 .internal-alias :onCodeUpgrade, 2
 .internal :onCodeUpgrade
-.loc IdxDidDocument.sol, 66
+.loc IdxDidDocument.sol, 65
 PUSHREFSLICE {
 	.blob x8000000000000000000000000000000000000000000000000000000000000000001_
 }
@@ -274,14 +274,14 @@ PUSHREFSLICE {
 SETGLOB 12
 PUSHINT 0
 SETGLOB 13
-.loc IdxDidDocument.sol, 67
+.loc IdxDidDocument.sol, 66
 CTOS
-.loc IdxDidDocument.sol, 68
+.loc IdxDidDocument.sol, 67
 DUP
 LDMSGADDR
 POP S2
 SETGLOB 10
-.loc IdxDidDocument.sol, 69
+.loc IdxDidDocument.sol, 68
 LDU 16
 DROP
 SETGLOB 13
@@ -296,7 +296,7 @@ THROW 0
 DROP
 GETGLOB 6
 THROWIFNOT 76
-.loc IdxDidDocument.sol, 87
+.loc IdxDidDocument.sol, 86
 OVER
 PUSHCONT {
 	LDREF
@@ -322,12 +322,12 @@ THROW 0
 CALL $transfer_internal_macro$
 
 .macro transfer_internal_macro
-.loc IdxDidDocument.sol, 76
+.loc IdxDidDocument.sol, 75
 GETGLOB 9
 GETGLOB 10
 SDEQ
 THROWIFNOT 200
-.loc IdxDidDocument.sol, 90
+.loc IdxDidDocument.sol, 89
 XCHG S1, S2
 NEWC
 STSLICECONST x6_
