@@ -17,7 +17,7 @@ zero_addr=0000000000000000000000000000000000000000000000000000000000000000
 assert_not_empty()
 {
     local condition=$1
-    local message=${2+ "Critical error"}
+    local message=${2+}
     if [[ -z "$condition" ]]; then die ${message}; fi
 }
 
@@ -46,9 +46,15 @@ contract_address()
     local keys=$2
     assert_not_empty "$2" "deploy: keys missing"
     local path=$(dirname $contract_file)
-    set -x
     local result=$(tonos-cli genaddr --setkey $signer $path/$contract_file.tvc $path/$contract_file.abi.json | grep_deploy_addr)
-    set +x
+    echo $result
+}
+
+get_contract_balance()
+{
+    local addr=$1
+    assert_not_empty "$addr" "contract address missing"
+    local result=$(everdev c i -n main -a $addr | pcregrep -o1 '\((\d+) nano\)')
     echo $result
 }
 

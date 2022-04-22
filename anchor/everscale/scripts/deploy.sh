@@ -32,8 +32,7 @@ then
     yell SE network
 elif [[ "$network" = "dev" ]] 
 then
-    # giver_arg="-v $initial_balance"
-    giver_arg=""
+    giver_arg="-v $initial_balance"
     url_param="--url net.ton.dev"
     signer=$idx_signer
     yell DEV network
@@ -53,16 +52,20 @@ fi
 
 ddcode=$(decode_contract_code $root/IdxDidDocument.tvc)
 
-if [[ "$network" = "main" ]] #|| [[ "$network" = "dev" ]] 
+if [[ "$network" = "main" ]]
 then
     # calc the target addr
     caddr=$(tonos-cli genaddr --setkey ~/tonkeys/$signer ../IdxDidRegistry.tvc ../IdxDidRegistry.abi.json | grep_deploy_addr)
     assert_not_empty $caddr "Cannot generate addr"
     #topping up the acc
     yell topping $(f_green $caddr)
-    set -x
-    success=$(tonos-cli $url_param multisig send --addr 0:00c9418e59d2f6aab6bb891b4e2f63733d37d15f41f229ff57ea84d00eae477f --dest $caddr --purpose "deploy" --sign ~/tonkeys/cwallet --value 1000000000 | grep_success)
+    #success=$(tonos-cli $url_param multisig send --addr $(cat ~/tonkeys/cwallet_address) --dest $caddr --purpose "deploy" --sign ~/tonkeys/cwallet --value 1000000000 | grep Succeeded)
+    success=$(everdev c r -n main -s cwallet SafeMultisigWallet -a $(cat ~/tonkeys/cwallet_address) sendTransaction -i dest:$(echo -n $caddr | cut -d':' -f2),value:1000000000,bounce:false,flags:0,payload:\"\" | grep_success)
     assert_not_empty "$success" "Cannot top up the acc: $caddr"
+    sleep 6s
+    balance=$(get_contract_balance $caddr)
+    assert_not_empty "$balance" "Can't get registry balance. Probably the account is missing"
+    [[ "$balance" -lt "900000000" ]] && die Low balance on the registry: $balanace
 fi
 
 yell Deploying Identix DID registry
@@ -72,6 +75,7 @@ yell Registry deployed $(f_green $registry_addr)
 doc_addr=$(everdev c r -n $network -s $signer $root/IdxDidRegistry issueDidDoc -i subjectPubKey:0x$subj_pubkey,salt:1,didController:0000000000000000000000000000000000000000000000000000000000000000,answerId:0 | grep didDocAddr | cut -d'"' -f4)
 assert_not_empty "$doc_addr" "issueDidDoc failed"
 yell Document deployed $(f_green $doc_addr)
+sleep 6s
 resultcontent=$(everdev c l -n $network -s $signer -a $doc_addr $root/IdxDidDocument controller | grep controller | cut -d'"' -f4)
 if [[ "$registry_addr" != "$resultcontent" ]]
 then

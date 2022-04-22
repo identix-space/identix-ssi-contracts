@@ -83,9 +83,9 @@ contract IdxDidDocument is IIdxDidDocument
     }
 
     ////// General //////
-    function transfer(address dest, uint128 amount, bool bounce) 
+    function transfer(address dest, uint128 value, bool bounce) 
         public pure onlyController
     {
-        dest.transfer(amount, bounce, 0);
+        dest.transfer(value, bounce, 0);
     }
 }

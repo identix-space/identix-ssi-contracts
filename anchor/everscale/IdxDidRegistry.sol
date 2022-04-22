@@ -154,10 +154,10 @@ contract IdxSsoDidRegistry
     }
 
     ////// General //////
-    function transfer(address dest, uint128 amount, bool bounce) 
+    function transfer(address dest, uint128 value, bool bounce) 
         public pure
         checkAccessAndAccept()
     {
-        dest.transfer(amount, bounce, 0);
+        dest.transfer(value, bounce, 0);
     }
 }
