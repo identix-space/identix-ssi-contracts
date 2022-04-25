@@ -1,0 +1,9 @@
+{
+    //"$schema": "https://identix.space/schemas/meta/predicate",
+    "$schema": "/meta/predicate",
+    "id": "did:identixschemas/officials/issuing_body",
+    "alias": "issuing_body",
+    "object_def": {
+        "expected_types": [ "string" ]
+    }
+}

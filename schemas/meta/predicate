@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "https://identix.space/schemas/meta/predicate",
+    "title": "Verifiable Credentials Claims Specification",
+    "type": "object",
+    "properties": {
+        "id": { "ref": "/meta/did" },
+        "alias": { "type": "string" },
+        "object_def": { "$ref": "#/$defs/object_def" }
+    },
+    "$defs": {
+        "object_def": {
+            "$anchor": "object_def",
+            "properties": {
+                "expected_types": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "boolean" },
+                            { "$ref": "/meta/did" }
+                        ]
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                }
+            },
+            "required": [ "expected_types" ],
+            "additionalProperties": false
+        }
+    }
+}

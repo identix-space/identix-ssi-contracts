@@ -1,0 +1,9 @@
+{
+    //"$schema": "https://identix.space/schemas/meta/predicate",
+    "$schema": "/meta/predicate",
+    "id": "did:identixschemas/officials/is_citizen_of",
+    "alias": "is_citizen_of",
+    "object_def": {
+        "expected_types": [ "string" ]
+    }
+}
