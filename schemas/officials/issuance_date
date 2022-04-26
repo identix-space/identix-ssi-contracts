@@ -1,8 +1,7 @@
 {
-    "$schema2": "https://identix.space/schemas/meta/predicate",
-    "$schema": "/meta/predicate",
+    "$schema": "https://identix.space/schemas/meta/predicate",
     "id": "did:identixschemas/officials/expiry_date",
-    "alias": "issuance_date",
+    "alias": "expiry_date",
     "object_def": {
         "expected_types": [ "datetime" ]
     }

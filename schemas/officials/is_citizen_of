@@ -1,6 +1,5 @@
 {
-    "$schema2": "https://identix.space/schemas/meta/predicate",
-    "$schema": "/meta/predicate",
+    "$schema": "https://identix.space/schemas/meta/predicate",
     "id": "did:identixschemas/officials/is_citizen_of",
     "alias": "is_citizen_of",
     "object_def": {

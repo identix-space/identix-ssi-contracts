@@ -1,7 +1,6 @@
 {
-    "$schema2": "https://identix.space/schemas/meta/vccs",
-    "$schema": "/meta/vccs",
-    "id": "did:ever:identixschemas/examples/stateid",
+    "$schema": "https://identix.space/schemas/meta/vccs",
+    "id": "did:identixschemas/examples/stateid",
     "groups": [
         {
             "id": "#names",

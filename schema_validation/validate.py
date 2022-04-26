@@ -38,6 +38,7 @@ inherited = idx_vccs_validator.resolver.resolve_remote
 idx_vccs_validator.resolver.resolve_remote = lambda url: local_ref_resolve_remote(inherited, url)
 
 predicates = list(map(jload, glob('schemas/core/*')))
+predicates += list(map(jload, glob('schemas/officials/*')))
 examples = list(map(jload, glob('schemas/examples/*')))
 
 for p in predicates:
