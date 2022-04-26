@@ -4,7 +4,7 @@
     "title": "Verifiable Credentials Claims Specification",
     "type": "object",
     "properties": {
-        "id": { "ref": "#/$defs/did" },
+        "id": { "ref": "/schemas/meta/did" },
         "title": { "type": "string" },
         "groups": {
             "type": "array",
