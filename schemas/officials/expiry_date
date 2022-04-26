@@ -1,5 +1,5 @@
 {
-    //"$schema": "https://identix.space/schemas/meta/predicate",
+    "$schema2": "https://identix.space/schemas/meta/predicate",
     "$schema": "/meta/predicate",
     "id": "did:identixschemas/officials/expiry_date",
     "alias": "expiry_date",

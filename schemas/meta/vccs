@@ -1,5 +1,5 @@
 {
-    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$schema": "http://json-schema.org/draft/2020-12/schema",
     "$id": "https://identix.space/schemas/meta/vccs",
     "title": "Verifiable Credentials Claims Specification",
     "type": "object",
@@ -18,7 +18,7 @@
             "$comment": "Claim definition group. Signed as a unit",
             "type": "object",
             "properties": {
-                "id": { "$ref": "/meta/did"},
+                "id": { "$ref": "/schemas/meta/did"},
                 "claims": {
                     "type": "array",
                     "items": { "$ref": "#/$defs/claim_def" },
@@ -34,7 +34,7 @@
             "$comment": "Claim definition",
             "type": "object",
             "properties": {
-                "predicate": { "$ref": "/meta/did" },
+                "predicate": { "$ref": "/schemas/meta/did" },
                 "controllers": {
                     "type": "array",
                     "items": { "enum": [ "holder", "issuer" ] },

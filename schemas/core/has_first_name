@@ -1,6 +1,5 @@
 {
-    //"$schema": "https://identix.space/schemas/meta/predicate",
-    "$schema": "/meta/predicate",
+    "$schema": "/schemas/meta/predicate",
     "id": "did:identixschemas/core/has_first_name",
     "alias": "has_first_name",
     "object_def": {
