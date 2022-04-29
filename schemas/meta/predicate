@@ -19,6 +19,7 @@
                             { "type": "string" },
                             { "type": "number" },
                             { "type": "boolean" },
+                            { "type": "datetime" },
                             { "$ref": "/schemas/meta/did" }
                         ]
                     },

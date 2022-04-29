@@ -2,10 +2,10 @@ pragma ton-solidity >= 0.58.2;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
-import "libraries/Errors.sol";
-import "libraries/Aux.sol";
-import "libraries/Gas.sol";
-import "interfaces/IIdxDidDocument.sol";
+import "../libraries/Errors.sol";
+import "../libraries/Aux.sol";
+import "../libraries/Gas.sol";
+import "../interfaces/IIdxDidDocument.sol";
 import "IdxDidDocument.sol";
 
 contract IdxSsoDidRegistry 
