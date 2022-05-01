@@ -1,5 +1,6 @@
 {
     "$schema": "/schemas/meta/predicate",
+    // comment
     "id": "did:identixschemas/core/has_first_name",
     "alias": "has_first_name",
     "object_def": {

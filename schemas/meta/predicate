@@ -15,13 +15,8 @@
                 "expected_types": {
                     "type": "array",
                     "items": {
-                        "oneOf": [
-                            { "type": "string" },
-                            { "type": "number" },
-                            { "type": "boolean" },
-                            { "type": "datetime" },
-                            { "$ref": "/schemas/meta/did" }
-                        ]
+                        "type": "string",
+                        "enum": [ "string", "number", "boolean", "datetime", "did" ]
                     },
                     "minItems": 1,
                     "uniqueItems": true

@@ -54,6 +54,8 @@ contract IdxDidDocument is IIdxDidDocument
         state.store(controller);
         state.store(newCodeVer);
 
+        tvm.accept();
+        tvm.commit();
         tvm.setcode(code);
         tvm.setCurrentCode(code);
         onCodeUpgrade(state.toCell());

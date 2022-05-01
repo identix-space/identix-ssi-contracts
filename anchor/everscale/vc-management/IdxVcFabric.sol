@@ -6,20 +6,20 @@ import "IdxVc.sol";
 
 contract Issuer 
 {
-    TvmCell private _vcBaseImage;
+    // update controller
+    address static public idxAuthority;
+    uint16 public codeVer;
 
-    constructor() public
+    constructor() public externalMsg
     {
-
-    }
-
-    function setVcBaseImage(TvmCell image) public 
-    {
+        require(msg.pubkey() != 0, Errors.AddressOrPubKeyIsNull);
         tvm.accept();
-        _vcBaseImage = image;
+        codeVer = 0x0010;
     }
-    
-    function issueVc(Claim[] claims) public externalMsg returns (address vcAddress)
+   
+    function issueVc(Claim[] claims, TvmCell vcCode) 
+        public externalMsg 
+        returns (address vcAddress)
     {
         tvm.accept();
         for (uint i = 0; i < claims.length; ++i) 
@@ -41,5 +41,30 @@ contract Issuer
             }
         });
         vcAddress = new Vc{value: 0.1 ever, bounce: true, stateInit: state}();
+    }
+
+    ///// Upgrade //////
+    function upgrade(TvmCell code, uint16 newCodeVer) 
+        public onlyIdxAuthority
+    {
+        require (newCodeVer > codeVer);
+        TvmBuilder state;
+        state.store(controller);
+        state.store(newCodeVer);
+
+        tvm.accept();
+        tvm.commit();
+        tvm.setcode(code);
+        tvm.setCurrentCode(code);
+        onCodeUpgrade(state.toCell());
+    }
+
+    function onCodeUpgrade(TvmCell data) 
+        private 
+    {
+        tvm.resetStorage();
+        TvmSlice slice = data.toSlice();
+        controller = slice.decode(address);
+        codeVer = slice.decode(uint16);
     }
 }
