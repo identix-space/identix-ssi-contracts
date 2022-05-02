@@ -1,5 +1,5 @@
 {
-    "$schema": "https://identix.space/schemas/meta/predicate",
+    "$schema": "https://schemas.identix.space/meta/predicate",
     "id": "did:identixschemas/officials/is_resident_of_address",
     "alias": "is_resident_of_address",
     "object_def": {

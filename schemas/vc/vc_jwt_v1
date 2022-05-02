@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft/2020-12/schema",
-    "$id": "https://identix.space/schemas/vc/vc_jwt_v1",
+    "$id": "https://schemas.identix.space/vc/vc_jwt_v1",
     "title": "Verifiable Credentials Schema",
 
     "type": "object",
@@ -9,7 +9,7 @@
         "payload": { "ref": "#/$defs/payload" },
         // signature = ES256(base64UrlEncode(header) + "." + base64UrlEncode(payload), issuer_private_key)
         // jwt = base64UrlEncode(header) + "." + base64UrlEncode(payload) + "." + base64UrlEncode(signature)
-        "jwt": { "ref": "/schemas/meta/jwt" }
+        "jwt": { "ref": "/meta/jwt" }
     },
     "required": [ "header", "payload", "jwt" ],
 
@@ -37,30 +37,30 @@
                 // DID of an Issuer
                 // https://www.rfc-editor.org/rfc/rfc7519#section-4.1.1
                 // MUST be present
-                "iss": { "$ref":  "/schemas/meta/did" },
+                "iss": { "$ref":  "/meta/did" },
                 // Intended VC audience
                 // https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3
                 // OPTIONAL
                 "aud": {
                     "type": "array",
                     "items": {
-                        "type": { "$ref":  "/schemas/meta/did" }
+                        "type": { "$ref":  "/meta/did" }
                     }
                 },
                 // Not Before date: start date of a validity period
                 // https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5
                 // MUST be formatted according to https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16, as specified at https://www.rfc-editor.org/rfc/rfc7519#section-2
                 // OPTIONAL
-                "nbf": { "$ref":  "/schemas/meta/datetime" },
+                "nbf": { "$ref":  "/meta/datetime" },
                 // issuance date
                 // https://www.rfc-editor.org/rfc/rfc7519#section-4.1.6
                 // MUST be formatted according to https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_16
                 // MUST be present
-                "iat": { "$ref":  "/schemas/meta/datetime" },
+                "iat": { "$ref":  "/meta/datetime" },
                 // Unique identifier for the JWT
                 // https://www.rfc-editor.org/rfc/rfc7519#section-4.1.7
                 // MUST be equal to payload.vc.id
-                "jti": { "$ref":  "/schemas/meta/did" },
+                "jti": { "$ref":  "/meta/did" },
                 // vc: JSON object, which MUST be present in a JWT verifiable credential.
                 // https://www.w3.org/TR/vc-data-model/#json-web-token-extensions
                 // MUST be present
@@ -83,7 +83,7 @@
                         // DID of the vc instance
                         // https://www.w3.org/TR/vc-data-model/#identifiers
                         // MUST be present
-                        "id": { "$ref": "/schemas/meta/did" },
+                        "id": { "$ref": "/meta/did" },
                         // VC type (schema) identifiers
                         // MUST be present
                         "type": { "type": "array", "items": "string" },
@@ -101,7 +101,7 @@
                                         "#anchor": "claim_group",
                                         "type": "object",
                                         "properties": {
-                                            "id": { "$ref": "/schemas/meta/did#did_fragment" },
+                                            "id": { "$ref": "/meta/did#did_fragment" },
                                             "claims": {
                                                 "type": "array",
                                                 "items": {
@@ -109,9 +109,9 @@
                                                     "type": "object",
                                                     "patternProperties": {
                                                         // subject DID
-                                                        "^s(ubject)?$": { "$ref": "/schemas/meta/did" },
+                                                        "^s(ubject)?$": { "$ref": "/meta/did" },
                                                         // registered predicate DID | property name
-                                                        "^p(redicate)$": { "$ref": "/schemas/meta/did" },
+                                                        "^p(redicate)$": { "$ref": "/meta/did" },
                                                         // object | property value
                                                         // currently, we only support simple value types
                                                         "^o(bject)$": { "type": "string" }
@@ -119,7 +119,8 @@
                                                     "required": [ "subject", "predicate", "object" ],
                                                     "additionalProperties": false
                                                 }
-                                            }
+                                            },
+                                            "signature": { "type": "string" }
                                         },
                                         "required": [ "id", "claims" ],
                                         "additionalProperties": false

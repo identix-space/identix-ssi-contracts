@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://identix.space/schemas/meta/jwt",
+    "$id": "https://schemas.identix.space/meta/jwt",
     "title": "JSON Web Token",
     "type": "string",
     "pattern": "^[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+"

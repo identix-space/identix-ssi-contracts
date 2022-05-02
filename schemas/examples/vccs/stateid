@@ -1,5 +1,5 @@
 {
-    "$schema": "https://identix.space/schemas/meta/vccs",
+    "$schema": "https://schemas.identix.space/meta/vccs",
     "id": "did:identixschemas/examples/stateid",
     "groups": [
         {

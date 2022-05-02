@@ -1,5 +1,5 @@
 {
-    "$schema": "https://identix.space/schemas/meta/predicate",
+    "$schema": "https://schemas.identix.space/meta/predicate",
     "id": "did:identixschemas/officials/has_citizenship_document_of_type",
     "alias": "has_citizenship_document_of_type",
     "object_def": {

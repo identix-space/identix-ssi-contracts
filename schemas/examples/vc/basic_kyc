@@ -1,5 +1,5 @@
 {
-    "$schema": "https://identix.space/schemas/vc/vc_jwt_v1",
+    "$schema": "https://schemas.identix.space/vc/vc_jwt_v1",
     "header":
     {
         "typ": "JWT",
@@ -36,7 +36,8 @@
                                 "predicate": "did:identixschemas/core/has_last_name",
                                 "object": "Иванов"
                             }
-                        ]
+                        ],
+                        "signature": "1234568790ACBDF"
                     },
                     {
                         "id": "birth",
@@ -46,7 +47,8 @@
                                 "predicate": "did:identixschemas/core/was_born_on",
                                 "object": "22-01-1987"
                             }
-                        ]
+                        ],
+                        "signature": "ACCBD1234568790AC"
                     }
                 ]
             }

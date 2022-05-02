@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://identix.space/schemas/meta/datetime",
+    "$id": "https://schemas.identix.space/meta/datetime",
     "title": "Serialized datetime struct",
     "oneOf": [
         { "$ref": "#/$defs/posix1_2017" },
