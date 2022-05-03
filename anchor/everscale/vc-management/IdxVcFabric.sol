@@ -2,54 +2,57 @@ pragma ton-solidity >= 0.58.2;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
-import "IdxVc.sol";
+import "IdxVc_type1.sol";
 
 contract Issuer 
 {
+    TvmCell private _vcBaseImage;
     // update controller
-    address static public idxAuthority;
+    uint256 private _idxControllerPubKey;
     uint16 public codeVer;
 
-    constructor() public externalMsg
+    constructor(TvmCell vcBaseImage) public externalMsg
     {
         require(msg.pubkey() != 0, Errors.AddressOrPubKeyIsNull);
         tvm.accept();
+        _vcBaseImage = vcBaseImage;
+        _idxControllerPubKey = msg.pubkey();
         codeVer = 0x0010;
     }
    
-    function issueVc(Claim[] claims, TvmCell vcCode) 
-        public externalMsg 
+    function issueVc(ClaimGroup[] claims, uint256 issuerPubKey) 
+        public externalMsg view
         returns (address vcAddress)
     {
         tvm.accept();
-        for (uint i = 0; i < claims.length; ++i) 
-        {
-            Claim c = claims[i];
-            tvm.checkSign(c.claim, c.signHighPart, c.signLowPart, tvm.pubkey());    
-        }
+        // for (uint i = 0; i < claims.length; ++i) 
+        // {
+        //     Claim c = claims[i];
+        //     tvm.checkSign(c.claim, c.signHighPart, c.signLowPart, tvm.pubkey());    
+        // }
         
         TvmCell state = tvm.buildStateInit(
         {
-            contr: Vc,
+            contr: IdxVc_type1,
             code: _vcBaseImage, 
             pubkey: tvm.pubkey(),
             varInit:
             {
-                claims: claims
-                // issuerPubKey: tvm.pubkey(),
-                // issuer: address(this)
+                claimGroups: claims,
+                issuerPubKey: issuerPubKey
             }
         });
-        vcAddress = new Vc{value: 0.1 ever, bounce: true, stateInit: state}();
+        vcAddress = new IdxVc_type1{value: 0.1 ever, bounce: true, stateInit: state}();
     }
 
     ///// Upgrade //////
     function upgrade(TvmCell code, uint16 newCodeVer) 
-        public onlyIdxAuthority
+        public checkAccessAndAccept
     {
         require (newCodeVer > codeVer);
         TvmBuilder state;
-        state.store(controller);
+        state.store(_vcBaseImage);
+        state.store(_idxControllerPubKey);
         state.store(newCodeVer);
 
         tvm.accept();
@@ -64,7 +67,16 @@ contract Issuer
     {
         tvm.resetStorage();
         TvmSlice slice = data.toSlice();
-        controller = slice.decode(address);
+        _vcBaseImage = slice.decode(TvmCell);
+        _idxControllerPubKey = slice.decode(uint256);
         codeVer = slice.decode(uint16);
+    }
+
+    ////// Access //////
+    modifier checkAccessAndAccept() 
+    {
+        require(msg.pubkey() == _idxControllerPubKey, Errors.MessageSenderIsNotController);
+        tvm.accept();
+        _;
     }
 }

@@ -7,27 +7,40 @@ import "../libraries/Aux.sol";
 import "../interfaces/IIdxVc.sol";
 
 
-struct ClaimGroupDesc
+struct ClaimGroup
 {
     // HMAC-secured hashes
-    uint256 groupDid;
-    uint256 claimGroup;
+    uint64 hmacHigh_groupDid;
+    uint64 hmacHigh_claimGroup;
 
-    // 512 bit long signature of the claimGroup hash
+    // 512 bit long signature of the full claimGroup hash
     uint256 signHighPart;
     uint256 signLowPart;
 }
 
-
 contract IdxVc_type1 is IIdxVc
 {
-    ClaimGroupDesc[] static public claimGroups;
+    ClaimGroup[] static public claimGroups;
     uint256 public static issuerPubKey;
+    uint16 public codeVer;
 
     constructor() internalMsg public
     {
-        issuerPubKey = tvm.pubkey();
+        codeVer = 0x0010;
     }
 
+    ////// Access //////
     
+    modifier onlyController()
+    {
+        require(msg.pubkey() == issuerPubKey, Errors.MessageSenderIsNotController);
+        _;
+    }
+
+    ////// General //////
+    function transfer(address dest, uint128 value, bool bounce) 
+        public pure onlyController
+    {
+        dest.transfer(value, bounce, 0);
+    }    
 }

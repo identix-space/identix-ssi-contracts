@@ -1,9 +1,9 @@
 {
     "$schema": "https://schemas.identix.space/meta/vccs",
-    "id": "did:identixschemas/examples/stateid",
+    "id": "did:identixschemas/examples/vccs/stateid",
     "groups": [
         {
-            "id": "#names",
+            "id": "names",
             "claims": [
                 { "predicate" : "did:identixschemas/core/has_first_name", "controllers": [ "issuer" ] },
                 { "predicate" : "did:identixschemas/core/has_middle_name", "controllers": [ "issuer" ] },
@@ -11,13 +11,13 @@
             ]
         },
         {
-            "id": "#birth",
+            "id": "birth",
             "claims": [
                 { "predicate" : "did:identixschemas/core/was_born_on", "controllers": [ "issuer" ] }
             ]
         },
         {
-            "id": "#citizenship",
+            "id": "citizenship",
             "claims": [
                 { "predicate" : "did:identixschemas/officials/is_citizen_of", "controllers": [ "issuer" ] },
                 { "predicate" : "did:identixschemas/core/officials/has_citizenship_document_of_type", "controllers": [ "issuer" ] },
