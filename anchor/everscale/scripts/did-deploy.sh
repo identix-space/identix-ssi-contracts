@@ -33,13 +33,13 @@ then
 elif [[ "$network" = "dev" ]] 
 then
     giver_arg="-v $initial_balance"
-    url_param="--url net.ton.dev"
+    url_param="--url eri01.net.everos.dev"
     signer=$idx_signer
     yell DEV network
 elif [[ "$network" = "main" ]] 
 then
     giver_arg=""
-    url_param="-u main.ton.dev"
+    url_param="-u eri01.main.everos.dev"
     signer=$idx_signer
     yell MAIN network
 else
@@ -52,20 +52,29 @@ fi
 
 ddcode=$(decode_contract_code $root/IdxDidDocument.tvc)
 
-if [[ "$network" = "main" ]]
+if [[ "$network" = "main" ]] || [[ "$network" = "dev" ]];
 then
     # calc the target addr
-    caddr=$(tonos-cli genaddr --setkey ~/tonkeys/$signer ../IdxDidRegistry.tvc ../IdxDidRegistry.abi.json | grep_deploy_addr)
-    assert_not_empty $caddr "Cannot generate addr"
-    #topping up the acc
-    yell topping $(f_green $caddr)
-    #success=$(tonos-cli $url_param multisig send --addr $(cat ~/tonkeys/cwallet_address) --dest $caddr --purpose "deploy" --sign ~/tonkeys/cwallet --value 1000000000 | grep Succeeded)
-    success=$(everdev c r -n main -s cwallet SafeMultisigWallet -a $(cat ~/tonkeys/cwallet_address) sendTransaction -i dest:$(echo -n $caddr | cut -d':' -f2),value:1000000000,bounce:false,flags:0,payload:\"\" | grep_success)
-    assert_not_empty "$success" "Cannot top up the acc: $caddr"
-    sleep 6s
+    caddr=$(tonos-cli genaddr --setkey ~/tonkeys/$signer $root/IdxDidRegistry.tvc $root/IdxDidRegistry.abi.json | grep_deploy_addr)
+    assert_not_empty "$caddr" "Cannot generate addr"
     balance=$(get_contract_balance $caddr)
-    assert_not_empty "$balance" "Can't get registry balance. Probably the account is missing"
-    [[ "$balance" -lt "900000000" ]] && die Low balance on the registry: $balanace
+    if [[ -z "$balance" ]]; 
+    then 
+        balance="0" 
+    fi
+    if (( "$initial_balance" > "$balance" ));
+    then
+        #topping up the acc
+        yell Balance of $(f_green $caddr) is low: $(f_red $balance), topping it up
+        #success=$(tonos-cli $url_param multisig send --addr $(cat ~/tonkeys/cwallet_address) --dest $caddr --purpose "deploy" --sign ~/tonkeys/cwallet --value 1000000000 | grep Succeeded)
+        success=$(everdev c r -n $network -s cwallet SafeMultisigWallet -a $(cat ~/tonkeys/cwallet_address) sendTransaction -i dest:$(echo -n $caddr | cut -d':' -f2),value:1000000000,bounce:false,flags:0,payload:\"\" | grep_success)
+        assert_not_empty "$success" "Cannot top up the acc: $caddr"
+        sleep 6s
+        balance=$(get_contract_balance $caddr)
+        assert_not_empty "$balance" "Can't get balance. Probably the account is missing"
+        [[ "$balance" -lt "900000000" ]] && die Low balance on the fabric: $balanace
+    fi
+    yell DID registry balance is $(f_green $balance)
 fi
 
 yell Deploying Identix DID registry

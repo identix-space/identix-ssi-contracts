@@ -17,7 +17,7 @@ zero_addr=0000000000000000000000000000000000000000000000000000000000000000
 assert_not_empty()
 {
     local condition=$1
-    local message=${2+}
+    local message=${2}
     if [[ -z "$condition" ]]; then die ${message}; fi
 }
 
@@ -54,7 +54,7 @@ get_contract_balance()
 {
     local addr=$1
     assert_not_empty "$addr" "contract address missing"
-    local result=$(everdev c i -n main -a $addr | pcregrep -o1 '\((\d+) nano\)')
+    local result=$(everdev c i -n $network -a $addr | pcregrep -o1 '\((\d+) nano\)')
     echo $result
 }
 

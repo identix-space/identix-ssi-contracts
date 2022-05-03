@@ -7,4 +7,5 @@ library Errors {
     uint8 constant MissingOwnerPublicKey = 203;
     uint8 constant AddressOrPubKeyIsNull = 204;
     uint8 constant ValueTooLow = 205;
+    uint8 constant InvalidArgument = 206;
 }

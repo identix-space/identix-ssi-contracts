@@ -21,9 +21,10 @@ contract Issuer
     }
    
     function issueVc(ClaimGroup[] claims, uint256 issuerPubKey) 
-        public externalMsg view
+        public externalMsg view responsible
         returns (address vcAddress)
     {
+        require(claims.length > 0, Errors.InvalidArgument);
         tvm.accept();
         // for (uint i = 0; i < claims.length; ++i) 
         // {
