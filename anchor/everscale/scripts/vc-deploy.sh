@@ -72,6 +72,8 @@ then
         yell Balance of $(f_green $caddr) is low: $(f_red $balance), topping it up
         #success=$(tonos-cli $url_param multisig send --addr $(cat ~/tonkeys/cwallet_address) --dest $caddr --purpose "deploy" --sign ~/tonkeys/cwallet --value 1000000000 | grep Succeeded)
         success=$(everdev c r -n $network -s cwallet SafeMultisigWallet -a $(cat ~/tonkeys/cwallet_address) sendTransaction -i dest:$(echo -n $caddr | cut -d':' -f2),value:1000000000,bounce:false,flags:0,payload:\"\" | grep_success)
+        yell "Waiting for the tx to complete..."
+        sleep $timeout
         assert_not_empty "$success" "Cannot top up the acc: $caddr"
         sleep 6s
         balance=$(get_contract_balance $caddr)
@@ -85,10 +87,11 @@ yell Deploying Identix VC fabric
 fabric_addr=$(deploy_contract $root/IdxVcFabric $network $signer $giver_arg -i vcBaseImage:$ddcode)
 yell Fabric deployed $(f_green $fabric_addr)
 
-claim1='{"hmacHigh_groupDid":"1","hmacHigh_claimGroup":"20","signHighPart":"3","signLowPart":"4"}'
-claims=[$claim1]
-echo "type $f_bold 1 then the line below into the next two arg prompts:"
-echo $(f_bold $claim1)
+yell Testing VC issuance...
+claim1='{ "hmacHigh_groupDid": "1", "hmacHigh_claimGroup": "20", "signHighPart": "3", "signLowPart": "4" }'
+claims="[$claim1]"
+yell "type $(f_bold 1) then the line below into the next two arg prompts:"
+yell $(f_bold $claim1)
 #vc_addr=$(everdev c r -n $network -s $signer $root/IdxVcFabric issueVc -i claims:${claims},issuerPubKey:0x$issuer_pubkey,answerId:0 | grep didDocAddr | cut -d'"' -f4)
 vc_addr=$(everdev c r -n $network -s $signer $root/IdxVcFabric issueVc -i issuerPubKey:0x$issuer_pubkey,answerId:0 | grep vcAddr | cut -d'"' -f4)
 assert_not_empty "$vc_addr" "issueVc failed"
