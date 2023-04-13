@@ -10,7 +10,7 @@ idx_pubkey=$(everdev s l | pcregrep -o1 '$idx_signer\s+([0-9a-z]+)')
 subj_pubkey=$(everdev s l | pcregrep -o1 'test122021\s+([0-9a-z]+)')
 root=..
 
-for a in $@
+for a in "$@"
 do
     if [[ "$network" = "main" ]]
     then
@@ -20,6 +20,7 @@ do
         "se") network=se;;
         "dev") network=dev;;
         "main") network=main;;
+        "vtest") network=vtest;;
         "reset") do_reset=1;;
     esac
 done
@@ -40,6 +41,12 @@ elif [[ "$network" = "main" ]]
 then
     giver_arg=""
     url_param="-u eri01.main.everos.dev"
+    signer=$idx_signer
+    yell MAIN network
+elif [[ "$network" = "vtest" ]]
+then
+    giver_arg=""
+    url_param="-u venom-testnet.evercloud.dev"
     signer=$idx_signer
     yell MAIN network
 else
