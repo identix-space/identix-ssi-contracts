@@ -1,8 +1,8 @@
-pragma ton-solidity >= 0.58.2;
+pragma ton-solidity = 0.61.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
-import "IdxVc_type1.sol";
+import "vc-management/IdxVc_type1.sol";
 
 contract Issuer 
 {

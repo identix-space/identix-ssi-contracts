@@ -1,12 +1,12 @@
-pragma ton-solidity >= 0.58.2;
+pragma ton-solidity = 0.61.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
-import "../libraries/Errors.sol";
-import "../libraries/Aux.sol";
-import "../libraries/Gas.sol";
-import "../interfaces/IIdxDidDocument.sol";
-import "IdxDidDocument.sol";
+import "libraries/Errors.sol";
+import "libraries/Aux.sol";
+import "libraries/Gas.sol";
+import "interfaces/IIdxDidDocument.sol";
+import "did-management/IdxDidDocument.sol";
 
 contract IdxSsoDidRegistry 
 {
@@ -66,7 +66,7 @@ contract IdxSsoDidRegistry
 
         _dids[didController].push(addr);
         
-        return (addr);
+        return {value: 0, bounce: false, flag: 64} (addr);
     }
 
     function getDidDocs(address controller)
@@ -89,7 +89,7 @@ contract IdxSsoDidRegistry
 
         address[] result;
         result = _dids[controller];
-        return result;
+        return {value: 0, bounce: false, flag: 64} result;
     }
 
     ////// Templating //////

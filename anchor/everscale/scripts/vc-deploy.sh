@@ -1,6 +1,6 @@
 #!/bin/bash
 #set -x
-. lib-contracts.sh
+. scripts/lib-contracts.sh
 
 initial_balance=1000000000
 network=Unknown
@@ -8,10 +8,10 @@ do_reset=0
 idx_signer=idx
 idx_pubkey=$(everdev s l | pcregrep -o1 '$idx_signer\s+([0-9a-z]+)')
 issuer_pubkey=$(everdev s l | pcregrep -o1 'test122021\s+([0-9a-z]+)')
-root=../vc-management
+root=./vc-management
 timeout=10
 
-for a in $@
+for a in "$@"
 do
     if [[ "$network" = "main" ]]
     then
@@ -56,6 +56,8 @@ fi
 
 ddcode=$(decode_contract_code $root/IdxVc_type1.tvc)
 
+# everdev sol set -c 0.61.0 -l 0.18.4
+
 if [[ "$network" = "main" ]] || [[ "$network" = "dev" ]];
 then
     # calc the target addr
@@ -91,7 +93,7 @@ yell Testing VC issuance...
 claim1='{ "hmacHigh_groupDid": "1", "hmacHigh_claimGroup": "20", "signHighPart": "3", "signLowPart": "4" }'
 claims="[$claim1]"
 yell "type $(f_bold 1) then the line below into the next two arg prompts:"
-yell $(f_bold $claim1)
+yell "$(f_bold $claim1)"
 #vc_addr=$(everdev c r -n $network -s $signer $root/IdxVcFabric issueVc -i claims:${claims},issuerPubKey:0x$issuer_pubkey,answerId:0 | grep didDocAddr | cut -d'"' -f4)
 vc_addr=$(everdev c r -n $network -s $signer $root/IdxVcFabric issueVc -i issuerPubKey:0x$issuer_pubkey,answerId:0 | grep vcAddr | cut -d'"' -f4)
 assert_not_empty "$vc_addr" "issueVc failed"

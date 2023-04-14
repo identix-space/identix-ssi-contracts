@@ -1,11 +1,11 @@
 shopt -s expand_aliases
 
-f_green() { echo $(tput setaf 2)$*$(tput sgr 0); }
+f_green() { echo "$(tput setaf 2)$*$(tput sgr 0)"; }
 f_red()   { echo "$(tput setaf 1)$*$(tput sgr 0)"; }
 f_bold()   { echo "$(tput smso)$*$(tput rmso)"; }
 
-yell() { echo $* >&2; }
-die()  { yell $(f_red "$*"); exit 111; }
+yell() { echo "$*" >&2; }
+die()  { yell "$(f_red "$*")"; exit 111; }
 try()  { "$@" || die "cannot $*"; }
 
 alias grep_deploy_addr="pcregrep -o1 'ddress.+?(0:[0-9a-z]+)' | cut -d$'\n' -f1"
@@ -18,7 +18,7 @@ assert_not_empty()
 {
     local condition=$1
     local message=${2}
-    if [[ -z "$condition" ]]; then die ${message}; fi
+    if [[ -z "$condition" ]]; then die "${message}"; fi
 }
 
 deploy_contract()
@@ -31,7 +31,7 @@ deploy_contract()
     assert_not_empty "$3" "deploy: signer missing"
     local params="$4 $5 $6 $7 $8"
 
-    everdev sol compile $contract_file.sol --output-dir $(dirname $contract_file)/
+    everdev sol compile $contract_file.sol -i . --output-dir $(dirname $contract_file)/
     [[ "$?" != "0" ]] && die "Error compiling $contract_file"
     yell Deploying $(f_bold $contract_file) at $network, signer $signer
     local caddr=$(everdev c d $contract_file.abi.json -n $network -s $signer $params | grep_deploy_addr)

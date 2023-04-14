@@ -1,13 +1,13 @@
-pragma ton-solidity >= 0.58.2;
+pragma ton-solidity = 0.61.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
-import "../libraries/Errors.sol";
-import "../libraries/Aux.sol";
-import "../interfaces/IIdxDidDocument.sol";
+import "libraries/Errors.sol";
+import "libraries/Aux.sol";
+import "interfaces/IIdxDidDocument.sol";
 
 contract IdxDidDocument is IIdxDidDocument  
-{   
+{
     // IIdxController
     address public controller;
     uint256 static public subjectPubKey;
@@ -15,7 +15,8 @@ contract IdxDidDocument is IIdxDidDocument
     address static public idxAuthority;
     uint16 public codeVer;
 
-    constructor(uint256 subjPubKey) public internalMsg
+    constructor(uint256 subjPubKey)
+        public internalMsg
     {
         require(msg.sender.value != 0, Errors.AddressOrPubKeyIsNull);
         require(idxAuthority.value != 0, Errors.AddressOrPubKeyIsNull);

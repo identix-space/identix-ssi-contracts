@@ -1,10 +1,10 @@
-pragma ton-solidity >= 0.58.2;
+pragma ton-solidity = 0.61.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
-import "../libraries/Errors.sol";
-import "../libraries/Aux.sol";
-import "../interfaces/IIdxVc.sol";
+import "libraries/Errors.sol";
+import "libraries/Aux.sol";
+import "interfaces/IIdxVc.sol";
 
 
 struct ClaimGroup
