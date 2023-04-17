@@ -8,7 +8,7 @@ do_reset=0
 idx_signer=idx
 idx_pubkey=$(everdev s l | pcregrep -o1 '$idx_signer\s+([0-9a-z]+)')
 issuer_pubkey=$(everdev s l | pcregrep -o1 'test122021\s+([0-9a-z]+)')
-root=./vc-management
+root=./ vc-management
 timeout=10
 
 for a in "$@"
