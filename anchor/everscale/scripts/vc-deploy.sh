@@ -7,7 +7,7 @@ set -o pipefail
 
 . scripts/lib-contracts.sh
 
-initial_balance=150000000
+initial_balance=250000000
 network=yet_unknown
 wallet=cwallet
 wallet_abi=SafeMultisigWallet
@@ -67,8 +67,6 @@ then
 fi
 
 # everdev sol set -c 0.61.0 -l 0.18.4
-compile "$contracts/IdxVcFabric.sol"
-compile "$contracts/IdxVc_type1.sol"
 
 
 if [[ -z "$giver_arg" ]]
@@ -95,12 +93,11 @@ then
     yell "VC fabric balance is $(f_green "$balance") at $caddr"
 fi
 # Deploying Identix VC fabric
-#set -x
 ddcode=$(decode_contract_code $contracts/IdxVc_type1.tvc)
 fabric_addr=$(deploy_contract $contracts/IdxVcFabric $network $signer "$giver_arg")
 yell "Fabric deployed $(f_green "$fabric_addr")"
 yell "Setting VC base image..."
-everdev c r -n $network -s $signer $contracts/IdxVcFabric setVcBaseImage -i vcBaseImage:"$ddcode"
+success=$(everdev c r -n $network -s $signer $contracts/IdxVcFabric setVcBaseImage -i vcBaseImage:"$ddcode" | grep_success)
 
 yell "Testing VC issuance..."
 claim1='{"hmacHigh_groupDid":"1","hmacHigh_claimGroup":"2","signHighPart":"3","signLowPart":"4"}'

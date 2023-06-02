@@ -4,5 +4,5 @@ pragma AbiHeader pubkey;
 
 contract TContract
 {
-    constructor() externalMsg { tvm.accept(); }
+    constructor() public externalMsg { tvm.accept(); }
 }

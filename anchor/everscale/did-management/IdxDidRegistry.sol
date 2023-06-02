@@ -22,7 +22,7 @@ contract IdxDidRegistry
         tvm.accept();
         _idxControllerPubKey = msg.pubkey();
         _didDocTemplateCode = tplCode;
-        codeVer = 0x0010;
+        codeVer = 0x0011;
     }
 
     ////// Document management //////

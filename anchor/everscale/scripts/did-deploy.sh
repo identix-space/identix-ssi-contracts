@@ -88,7 +88,7 @@ then
         #success=$(tonos-cli $url_param multisig send --addr $(cat ~/tonkeys/cwallet_address) --dest $caddr --purpose "deploy" --sign ~/tonkeys/cwallet --value 1000000000 | grep Succeeded)
         success=$(everdev c r -n $network -s "$wallet" scripts/$wallet_abi -a "$(cat ~/tonkeys/${wallet}_address)" sendTransaction -i dest:"$(echo -n "$caddr" | cut -d':' -f2)",value:$initial_balance,bounce:false,flags:0,payload:\"\" | grep_success)
         assert_not_empty "$success" "Cannot top up the acc: $caddr"
-        sleep 6s
+        sleep 8s
         balance=$(get_contract_balance "$caddr")
         assert_not_empty "$balance" "Can't get balance. Probably the account is missing"
         #[[ "$balance" -lt "900000000" ]] && die Low balance on the fabric: "$balance"
