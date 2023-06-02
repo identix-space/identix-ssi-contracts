@@ -6,6 +6,13 @@
 		{
 			"name": "constructor",
 			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setVcBaseImage",
+			"inputs": [
 				{"name":"vcBaseImage","type":"cell"}
 			],
 			"outputs": [
@@ -27,6 +34,16 @@
 			"inputs": [
 				{"name":"code","type":"cell"},
 				{"name":"newCodeVer","type":"uint16"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "transfer",
+			"inputs": [
+				{"name":"dest","type":"address"},
+				{"name":"value","type":"uint128"},
+				{"name":"bounce","type":"bool"}
 			],
 			"outputs": [
 			]

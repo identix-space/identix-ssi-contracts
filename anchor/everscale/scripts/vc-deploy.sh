@@ -7,22 +7,21 @@ set -o pipefail
 
 . scripts/lib-contracts.sh
 
-initial_balance=500000000
+initial_balance=150000000
 network=yet_unknown
 wallet=cwallet
 wallet_abi=SafeMultisigWallet
 do_reset=0
 idx_signer=idx
+# shellcheck disable=SC2034
 idx_pubkey=$(everdev s l | pcregrep -o1 "$idx_signer\s+([0-9a-z]+)")
 subj_pubkey=$(everdev s l | pcregrep -o1 "test122021\s+([0-9a-z]+)")
 contracts=./vc-management
 
+alias grep_vc_address="pcregrep -o1 'vcAddress\"\: \"(0:[0-9a-z]+)\"'"
+
 for a in "$@"
 do
-    if [[ "$network" = "main" ]]
-    then
-        wallet_addr=$a
-    fi
     case $a in
         "se") network=se;;
         "dev") network=dev;;
@@ -35,25 +34,25 @@ done
 if [[ "$network" = "se" ]]
 then
     giver_arg="-v $initial_balance"
-    url_param="-u localhost"
+    #url_param="-u localhost"
     signer=$idx_signer
     yell SE network
 elif [[ "$network" = "dev" ]]
 then
-    giver_arg="-v $initial_balance"
-    url_param="--url eri01.net.everos.dev"
+    giver_arg=""
+    #url_param="--url eri01.net.everos.dev"
     signer=$idx_signer
     yell DEV network
 elif [[ "$network" = "main" ]]
 then
     giver_arg=""
-    url_param="-u eri01.main.everos.dev"
+    #url_param="-u eri01.main.everos.dev"
     signer=$idx_signer
     yell MAIN network
 elif [[ "$network" = "vtest" ]]
 then
     giver_arg=""
-    url_param="-u venom-testnet.evercloud.dev"
+    #url_param="--url venom-testnet.evercloud.dev"
     signer=$idx_signer
     wallet=vwallet
     wallet_abi=everWallet
@@ -67,11 +66,12 @@ then
     everdev se reset; 
 fi
 
-ddcode=$(decode_contract_code $contracts/IdxVc_type1.tvc)
-
 # everdev sol set -c 0.61.0 -l 0.18.4
+compile "$contracts/IdxVcFabric.sol"
+compile "$contracts/IdxVc_type1.sol"
 
-if [[ -z "$giver_arg" ]];
+
+if [[ -z "$giver_arg" ]]
 then
     # calc the target addr
     caddr=$(tonos-cli genaddr --setkey ~/tonkeys/$signer $contracts/IdxVcFabric.tvc | grep_deploy_addr)
@@ -81,39 +81,39 @@ then
     then
         balance="0"
     fi
-    if (( "$initial_balance" > "$balance" ));
+    if (( "0" == "$balance" ));
     then
         #topping up the acc
         yell Balance of "$(f_green "$caddr")" is low: "$(f_red $balance)", topping it up
-        #success=$(tonos-cli $url_param multisig send --addr $(cat ~/tonkeys/cwallet_address) --dest $caddr --purpose "deploy" --sign ~/tonkeys/cwallet --value 1000000000 | grep Succeeded)
-        success=$(everdev c r -n $network -s "$wallet" scripts/$wallet_abi -a "$(cat ~/tonkeys/${wallet}_address)" sendTransaction -i dest:"$(echo -n "$caddr" | cut -d':' -f2)",value:500000000,bounce:false,flags:0,payload:\"\" | grep_success)
+        success=$(everdev c r -n $network -s "$wallet" scripts/$wallet_abi -a "$(cat ~/tonkeys/${wallet}_address)" sendTransaction -i dest:"$(echo -n "$caddr" | cut -d':' -f2)",value:"$initial_balance",bounce:false,flags:0,payload:\"\" | grep_success)
         assert_not_empty "$success" "Cannot top up the acc: $caddr"
         sleep 6s
         balance=$(get_contract_balance "$caddr")
         assert_not_empty "$balance" "Can't get balance. Probably the account is missing"
         #[[ "$balance" -lt "900000000" ]] && die Low balance on the fabric: "$balance"
     fi
-    yell DID registry balance is "$(f_green "$balance")"
+    yell "VC fabric balance is $(f_green "$balance") at $caddr"
 fi
+# Deploying Identix VC fabric
+#set -x
+ddcode=$(decode_contract_code $contracts/IdxVc_type1.tvc)
+fabric_addr=$(deploy_contract $contracts/IdxVcFabric $network $signer "$giver_arg")
+yell "Fabric deployed $(f_green "$fabric_addr")"
+yell "Setting VC base image..."
+everdev c r -n $network -s $signer $contracts/IdxVcFabric setVcBaseImage -i vcBaseImage:"$ddcode"
 
-yell Deploying Identix VC fabric
-fabric_addr=$(deploy_contract $contracts/IdxVcFabric $network $signer "$giver_arg" -i vcBaseImage:"$ddcode")
-yell Fabric deployed "$(f_green $fabric_addr)"
-
-yell Testing VC issuance...
-claim1='{ "hmacHigh_groupDid": "1", "hmacHigh_claimGroup": "20", "signHighPart": "3", "signLowPart": "4" }'
-claims="[$claim1]"
-yell "type $(f_bold 1) then the line below into the next two arg prompts:"
-yell "$(f_bold $claim1)"
-#vc_addr=$(everdev c r -n $network -s $signer $contracts/IdxVcFabric issueVc -i claims:"${claims}",issuerPubKey:0x$subj_pubkey,answerId:0 | grep didDocAddr | cut -d'"' -f4)
-vc_addr=$(everdev c r -n $network -s $signer $contracts/IdxVcFabric issueVc -i issuerPubKey:0x$subj_pubkey,answerId:0 | grep vcAddr | cut -d'"' -f4)
+yell "Testing VC issuance..."
+claim1='{"hmacHigh_groupDid":"1","hmacHigh_claimGroup":"2","signHighPart":"3","signLowPart":"4"}'
+args="{\"claims\":[$claim1],\"issuerPubKey\":\"0x$subj_pubkey\",\"answerId\":\"0\"}"
+vc_addr=$(everdev c r -n $network -s $signer $contracts/IdxVcFabric issueVc -i "${args}" | grep_vc_address)
 assert_not_empty "$vc_addr" "issueVc failed"
-yell VC deployed "$(f_green $vc_addr)"
+balance=$(get_contract_balance "$vc_addr")
+yell "VC deployed $(f_green "$vc_addr"), balance $(f_green "$balance")"
 yell "Waiting for the tx to complete..."
-sleep 6s
+sleep 2s
 resultcontent=$(everdev c l -n $network -s $signer -a "$vc_addr" $contracts/IdxVc_type1 issuerPubKey | grep issuerPubKey | cut -d'"' -f4)
 if [[ "0x$subj_pubkey" != "$resultcontent" ]]
 then
     die "VC check test failed. Got: \"$resultcontent\". Exp: \"$subj_pubkey\""
 fi
-yell "$(f_green OK)"
+yell "$(f_green All OK)"

@@ -1,14 +1,14 @@
-pragma ton-solidity = 0.61.0;
+pragma ton-solidity >= 0.58.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
-import "libraries/Errors.sol";
-import "libraries/Aux.sol";
-import "libraries/Gas.sol";
-import "interfaces/IIdxDidDocument.sol";
-import "did-management/IdxDidDocument.sol";
+import "../libraries/Errors.sol";
+import "../libraries/AuxLib.sol";
+import "../libraries/Gas.sol";
+import "../interfaces/IIdxDidDocument.sol";
+import "../did-management/IdxDidDocument.sol";
 
-contract IdxSsoDidRegistry 
+contract IdxDidRegistry
 {
     TvmCell private _didDocTemplateCode;
     uint256 private _idxControllerPubKey;

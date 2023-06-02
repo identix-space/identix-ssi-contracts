@@ -12,6 +12,7 @@ alias grep_deploy_addr="pcregrep -o1 'ddress.+?(0:[0-9a-z]+)' | cut -d$'\n' -f1"
 alias grep_success="grep -e '\"success\": true'"
 alias grep_output="pcregrep -M '(output.*(\n.*)+\}),'"
 
+# shellcheck disable=SC2034
 zero_addr=0000000000000000000000000000000000000000000000000000000000000000
 
 assert_not_empty()
@@ -19,6 +20,15 @@ assert_not_empty()
     local condition=$1
     local message=${2}
     if [[ -z "$condition" ]]; then die "${message}"; fi
+}
+
+compile()
+{
+  local contract_file=$1
+  assert_not_empty "$1" "compile: contract file missing"
+  yell "Compiling $(f_green "$contract_file")..."
+  everdev sol compile "$contract_file" --output-dir "$(dirname "$contract_file")"
+  if [[ -z "$?" ]]; then die "Error compiling $contract_file"; fi
 }
 
 deploy_contract()
@@ -31,10 +41,10 @@ deploy_contract()
     assert_not_empty "$3" "deploy: signer missing"
     local params="${4-} ${5-} ${6-} ${7-} ${8-}"
 
-    everdev sol compile "$contract_file".sol -i . --output-dir "$(dirname "$contract_file")"/
-    [[ "$?" != "0" ]] && die "Error compiling $contract_file"
     yell Deploying "$(f_bold "$contract_file")" at "$network", signer "$signer"
-    local caddr=$(everdev c d $contract_file.abi.json -n $network -s $signer $params | grep_deploy_addr)
+    local caddr
+    # shellcheck disable=SC2086
+    caddr=$(everdev c d "$contract_file.abi.json" -n "$network" -s "$signer" $params | grep_deploy_addr)
     assert_not_empty "$caddr" "Cannot deploy $contract_file"
     echo "$caddr"
 }
@@ -43,6 +53,7 @@ contract_address()
 {
     local contract_file=$1
     assert_not_empty "$1" "deploy: contract file missing"
+    # shellcheck disable=SC2034
     local keys=$2
     assert_not_empty "$2" "deploy: keys missing"
     local path

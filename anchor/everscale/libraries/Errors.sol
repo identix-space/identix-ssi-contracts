@@ -8,4 +8,5 @@ library Errors {
     uint8 constant AddressOrPubKeyIsNull = 204;
     uint8 constant ValueTooLow = 205;
     uint8 constant InvalidArgument = 206;
+    uint8 constant InvalidContractState = 207;
 }

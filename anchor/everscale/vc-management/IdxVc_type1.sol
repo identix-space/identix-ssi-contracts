@@ -1,10 +1,10 @@
-pragma ton-solidity = 0.61.0;
+pragma ton-solidity >= 0.58.0;
 pragma AbiHeader expire;
 pragma AbiHeader pubkey;
 
-import "libraries/Errors.sol";
-import "libraries/Aux.sol";
-import "interfaces/IIdxVc.sol";
+import "../libraries/Errors.sol";
+import "../libraries/AuxLib.sol";
+import "../interfaces/IIdxVc.sol";
 
 
 struct ClaimGroup
@@ -26,7 +26,7 @@ contract IdxVc_type1 is IIdxVc
 
     constructor() internalMsg public
     {
-        codeVer = 0x0010;
+        codeVer = 0x0013;
     }
 
     ////// Access //////

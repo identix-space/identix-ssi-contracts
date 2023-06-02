@@ -7,7 +7,7 @@ set -o pipefail
 
 . scripts/lib-contracts.sh
 
-initial_balance=5000000000
+initial_balance=500000000
 network=yet_unknown
 wallet=cwallet
 wallet_abi=SafeMultisigWallet
@@ -66,7 +66,8 @@ if [[ "$network" = "se" ]] && [[ "$do_reset" = "1" ]]; then
     everdev se reset; 
 fi
 
-ddcode=$(decode_contract_code $contracts/IdxDidDocument.tvc)
+compile "$contracts/IdxDidDocument.sol"
+compile "$contracts/IdxDidRegistry.sol"
 
 # everdev sol set -c 0.61.0 -l 0.18.4
 
@@ -80,22 +81,23 @@ then
     then 
         balance="0" 
     fi
-    if (( "$initial_balance" > "$balance" ));
+    if (( "0" >= "$balance" ));
     then
         #topping up the acc
         yell Balance of "$(f_green "$caddr")" is low: "$(f_red $balance)", topping it up
         #success=$(tonos-cli $url_param multisig send --addr $(cat ~/tonkeys/cwallet_address) --dest $caddr --purpose "deploy" --sign ~/tonkeys/cwallet --value 1000000000 | grep Succeeded)
-        success=$(everdev c r -n $network -s "$wallet" scripts/$wallet_abi -a "$(cat ~/tonkeys/${wallet}_address)" sendTransaction -i dest:"$(echo -n "$caddr" | cut -d':' -f2)",value:500000000,bounce:false,flags:0,payload:\"\" | grep_success)
+        success=$(everdev c r -n $network -s "$wallet" scripts/$wallet_abi -a "$(cat ~/tonkeys/${wallet}_address)" sendTransaction -i dest:"$(echo -n "$caddr" | cut -d':' -f2)",value:$initial_balance,bounce:false,flags:0,payload:\"\" | grep_success)
         assert_not_empty "$success" "Cannot top up the acc: $caddr"
         sleep 6s
         balance=$(get_contract_balance "$caddr")
         assert_not_empty "$balance" "Can't get balance. Probably the account is missing"
         #[[ "$balance" -lt "900000000" ]] && die Low balance on the fabric: "$balance"
     fi
-    yell DID registry balance is "$(f_green "$balance")"
+    yell "DID registry balance is $(f_green "$balance") at $(f_green "$caddr")"
 fi
 
 yell Deploying Identix DID registry
+ddcode=$(decode_contract_code $contracts/IdxDidDocument.tvc)
 registry_addr=$(deploy_contract $contracts/IdxDidRegistry $network $signer "$giver_arg" -i tplCode:"$ddcode")
 assert_not_empty "${registry_addr}" "Cannot deploy registry"
 yell Registry deployed "$(f_green "$registry_addr")"
