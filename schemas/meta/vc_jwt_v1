@@ -93,6 +93,8 @@
                         {
                             "type": "object",
                             "properties": {
+                                // VC Claims Specification
+                                "vccs" : { "$ref":  "/meta/did_or_url" },
                                 // each group is a set of claims
                                 // Each claim group MUST be normalized acc to ??? before signing or signature verification
                                 "groups": {
@@ -109,12 +111,12 @@
                                                     "type": "object",
                                                     "patternProperties": {
                                                         // subject DID
-                                                        "^s(ubject)?$": { "$ref": "/meta/did" },
+                                                        "subject": { "$ref": "/meta/did" },
                                                         // registered predicate DID | property name
-                                                        "^p(redicate)$": { "$ref": "/meta/did" },
+                                                        "predicate": { "$ref": "/meta/did_or_url" },
                                                         // object | property value
                                                         // currently, we only support simple value types
-                                                        "^o(bject)$": { "type": "string" }
+                                                        "object": { "type": "string" }
                                                     },
                                                     "required": [ "subject", "predicate", "object" ],
                                                     "additionalProperties": false
@@ -122,12 +124,12 @@
                                             },
                                             "signature": { "type": "string" }
                                         },
-                                        "required": [ "id", "claims" ],
+                                        "required": [ "id", "claims", "signature" ],
                                         "additionalProperties": false
                                     }
                                 }
                             },
-                            "required": [ "groups" ],
+                            "required": [ "vccs", "groups" ],
                             "additionalProperties": false
                         },
                         // If a JWS is present, the digital signature either refers to the issuer of the verifiable credential,

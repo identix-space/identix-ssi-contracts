@@ -18,7 +18,7 @@
             "$comment": "Claim definition group. Signed as a unit",
             "type": "object",
             "properties": {
-                "id": { "$ref": "/meta/did"},
+                "id": { "type": "string" },
                 "claims": {
                     "type": "array",
                     "items": { "$ref": "#/$defs/claim_def" },
@@ -34,13 +34,7 @@
             "$comment": "Claim definition",
             "type": "object",
             "properties": {
-                "predicate": { "$ref": "/meta/did" },
-                "controllers": {
-                    "type": "array",
-                    "items": { "enum": [ "holder", "issuer" ] },
-                    "minItems": 1,
-                    "uniqueItems": true
-                }
+                "predicate": { "$ref": "/meta/did_or_url" }
             },
             "required": [ "predicate" ],
             "additionalProperties": false

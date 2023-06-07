@@ -1,0 +1,116 @@
+{
+  "$schema": "https://schemas.identix.space/meta/vc_jwt_v1",
+  "header":
+  {
+    "typ": "JWT",
+    "alg": "ES256"
+  },
+  "payload":
+  {
+    "iss": "did:venom:01:issuer200",
+    "aud": [ "did:venom:01:verifiers300" ],
+    "nbf": "1541893810",
+    "iat": "1541493724",
+    "jti": "did:venom:02:cf322463da3da",
+    "vc":
+    {
+      "@context":
+	  [ 
+		"https://www.w3.org/2018/credentials/v1", "https://schemas.identix.space/emiratesid/emiratesid"
+	  ],
+      "id": "did:venom:02:cf322463da3da",
+      "type": [ "VerifiableCredential" ],
+      "credentialSubject": {
+        "groups": [
+          {
+            "id": "namesAR",
+            "claims": [
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/first_name",
+                "object": "علي"
+              },
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/last_name",
+                "object": "أبو بكر"
+              },
+            ],
+            "signature": "1234568790ACBDF"
+          },
+          {
+            "id": "namesEN",
+            "claims": [
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/first_name",
+                "object": "Ali"
+              },
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/last_name",
+                "object": "Abu Bakr"
+              },
+            ],
+            "signature": "1234568790ACBDF"
+          },
+          {
+            "id": "gender",
+            "claims": [
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/gender",
+                "object": "male"
+              },
+            ],
+            "signature": "1234568790ACBDF"
+          },
+          {
+            "id": "nationalityAR",
+            "claims": [
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/nationality",
+                "object": "الإمارات العربية المتحدة"
+              },
+            ],
+            "signature": "1234568790ACBDF"
+          },
+          {
+            "id": "nationalityEN",
+            "claims": [
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/nationality",
+                "object": "UAE"
+              },
+            ],
+            "signature": "1234568790ACBDF"
+          },
+          {
+            "id": "id_card",
+            "claims": [
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/idcard_issuance_date",
+                "object": "2002-03-11T12:00:00.00+03:00"
+              },
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/idcard_expiration_date",
+                "object": "2002-03-11T12:00:00.00+03:00"
+              },
+              {
+                "subject": "did:venom:01:holder100",
+                "predicate": "https://schemas.identix.space/emiratesid/idcard_issuer",
+                "object": "UAE Registration & Migration"
+              }
+            ],
+            "signature": "1234568790ACBDF"
+          }
+        ]
+      }
+    }
+  },
+  "jwt": "hhh.ppp.sss"
+}

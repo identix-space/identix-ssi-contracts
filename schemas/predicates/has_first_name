@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.identix.space/meta/predicate",
-    "id": "did:identixschemas/officials/is_resident_of_city",
-    "alias": "is_resident_of_city",
+    "$id": "https://schemas.identix.space/predicates/has_first_name",
+    "alias": "has_first_name",
     "object_def": {
         "expected_types": [ "string" ]
     }

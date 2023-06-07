@@ -1,0 +1,10 @@
+{
+    "$schema": "https://schemas.identix.space/meta/predicate",
+    "$id": "emiratesid/emiratesid/idcard_issuance_date",
+    "alias": "idcard_issuance_date",
+    "object_def": {
+        "expected_types": [
+            "datetime"
+        ]
+    }
+}

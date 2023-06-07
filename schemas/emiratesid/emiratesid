@@ -1,0 +1,70 @@
+//
+// https://docs.uaepass.ae/resources/attributes-list
+//
+{
+  "$schema": "https://schemas.identix.space/meta/vccs",
+  "$id": "https://schemas.identix.space/emiratesid/emiratesid",
+  "groups": [
+    {
+      // emirates id
+      "id": "emiratesid",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/emiratesid/idn" },
+      ]
+    },
+    {
+      // UAE Pass id
+      "id": "uuid",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/emiratesid/uuid" },
+      ]
+    },
+    {
+      // SmartPass id
+      "id": "spuuid",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/emiratesid/spuuid" },
+      ]
+    },
+    {
+      "id": "namesAR",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/emiratesid/first_name" },
+        { "predicate": "https://schemas.identix.space/emiratesid/last_name" },
+      ]
+    },
+    {
+      "id": "namesEN",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/emiratesid/first_name" },
+        { "predicate": "https://schemas.identix.space/emiratesid/last_name" },
+      ]
+    },
+    {
+      "id": "gender",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/emiratesid/gender" }
+      ]
+    },
+    {
+      "id": "nationalityAR",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/emiratesid/nationality" }
+      ]
+    },
+    {
+      "id": "nationalityEN",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/emiratesid/nationality" }
+      ]
+    },
+    {
+      "id": "idcard",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/emiratesid/idcard_issuance_date" },
+        { "predicate": "https://schemas.identix.space/emiratesid/idcard_expiration_date" },
+        { "predicate": "https://schemas.identix.space/emiratesid/idcard_issuer" }
+      ]
+    },
+  ]
+}

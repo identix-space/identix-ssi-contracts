@@ -3,13 +3,12 @@
     "$id": "https://schemas.identix.space/meta/did",
     "title": "Decentralized Identifier",
     "oneOf": [
-        { "$ref": "#/$defs/did_absolute" },
-        { "$ref": "#/$defs/did_relative" }
+        { "$ref": "#/$defs/did_absolute" }
     ],
     "$defs": {
         "did_absolute": {
             "type": "string",
-            "pattern": "^did(:([a-zA-Z0-9]+)+)(/[a-zA-Z0-9_-]+)*(#[a-zA-Z0-9_-]+)?$"
+            "pattern": "^did((:[a-zA-Z0-9]+)+)((\\/[a-zA-Z0-9_-]+)*)(\\?(&*[a-zA-Z0-9_-]+=[a-zA-Z0-9_-]+)*)*(#[a-zA-Z0-9_-]+)*$"
         },
         "did_relative": {
             "type": "string",

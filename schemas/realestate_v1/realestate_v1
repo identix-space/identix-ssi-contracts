@@ -1,0 +1,43 @@
+{
+  "$schema": "https://schemas.identix.space/meta/vccs",
+  "$id": "https://schemas.identix.space/realestate_v1/realestate_v1",
+  "groups": [
+    {
+      "id": "titledeedid",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/realestate_v1/titledeedid" }
+        ]
+    },
+    {
+      "id": "address",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/realestate_v1/city" },
+        { "predicate": "https://schemas.identix.space/realestate_v1/district" },
+        { "predicate": "https://schemas.identix.space/realestate_v1/address" },
+      ]
+    },
+    {
+      "id": "features",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/realestate_v1/type" },
+        { "predicate": "https://schemas.identix.space/realestate_v1/bedrooms" },
+        { "predicate": "https://schemas.identix.space/realestate_v1/livingspace" },
+      ]
+    },
+    {
+      "id": "ownership",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/realestate_v1/owner" },
+        { "predicate": "https://schemas.identix.space/realestate_v1/ownership_begin_date" }
+      ]
+    },
+    {
+      "id": "authority",
+      "claims": [
+        { "predicate": "https://schemas.identix.space/realestate_v1/issuing_institution" },
+        { "predicate": "https://schemas.identix.space/realestate_v1/issuance_date" },
+        { "predicate": "https://schemas.identix.space/realestate_v1/certificate_id" }
+      ]
+    }
+  ]
+}

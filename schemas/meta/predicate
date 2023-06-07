@@ -4,7 +4,7 @@
     "title": "Predicate specification",
     "type": "object",
     "properties": {
-        "id": { "$ref": "/meta/did" },
+        "id": { "$ref": "/meta/did_or_url" },
         "alias": { "type": "string" },
         "object_def": { "$ref": "#/$defs/object_def" }
     },
@@ -16,7 +16,7 @@
                     "type": "array",
                     "items": {
                         "type": "string",
-                        "enum": [ "string", "number", "boolean", "datetime", "did" ]
+                        "enum": [ "string", "number", "bool", "datetime", "did", "url" ]
                     },
                     "minItems": 1,
                     "uniqueItems": true
